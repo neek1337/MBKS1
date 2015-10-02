@@ -1,5 +1,6 @@
 enum Access {
-    Write, Read, Owner;
+    Write, Read, Owner, Execute;
+
 
     public static Access fromString(String s) {
         Access result = null;
@@ -13,6 +14,10 @@ enum Access {
         }
         if (s.equals("o")) {
             result = Access.Owner;
+            return result;
+        }
+        if (s.equals("e")) {
+            result = Access.Execute;
             return result;
         }
         return null;

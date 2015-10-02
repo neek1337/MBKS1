@@ -10,39 +10,19 @@ public class Main {
             if (s.equals("createSubject")) {
                 String subjName = scanner.next();
                 String password = scanner.next();
-                Table.getTable().createSubject(currentUser, subjName, password);
+                Table.getTable().createSubject(subjName, password);
                 System.out.println("Создан субъект " + subjName);
                 continue;
             }
 
 
-            if (s.equals("login")) {
-                String login = scanner.next();
-                String password = scanner.next();
-                try {
-                    MySubject user = Table.getTable().findSubject(login);
-                    if (user.getPassword().equals(password)) {
-                        currentUser = user;
-                        System.out.println("Добро пожаловать, " + login);
-                    } else {
-                        System.out.println("Ошибка авторизации.");
-                    }
-                } catch (IllegalAccessException e) {
-                    System.out.println(e.getMessage());
-                    ;
-                }
-                continue;
-            }
-
-
             if (s.equals("createObject")) {
-                String name = scanner.next();
-                if (currentUser != null) {
-                    Table.getTable().createObject(currentUser, name);
-                    System.out.println("Cоздан объект " + name);
-                } else {
-                    System.out.println("Необходимо авторизоваться.");
-                }
+
+                String userName = scanner.next();
+                String objname = scanner.next();
+                Table.getTable().createObject(Table.getTable().findSubject(userName), objname);
+                System.out.println("Cоздан объект " + objname);
+
                 continue;
             }
 
@@ -56,15 +36,9 @@ public class Main {
                     System.out.println("Недопустимое значение права доступа.");
                     continue;
                 }
-                if (currentUser != null) {
-                    try {
-                        Table.getTable().enter(currentUser, subjName, objName, access);
-                    } catch (IllegalAccessException e) {
-                        System.out.println(e.getMessage());
-                    }
-                } else {
-                    System.out.println("Необходимо авторизоваться.");
-                }
+
+                Table.getTable().enter(subjName, objName, access);
+
                 continue;
             }
 
@@ -78,38 +52,57 @@ public class Main {
                     System.out.println("Недопустимое значение права доступа.");
                     continue;
                 }
-                if (currentUser != null) {
-                    try {
-                        Table.getTable().delete(currentUser, subjName, objName, access);
-                    } catch (IllegalAccessException e) {
-                        System.out.println(e.getMessage());
-                    }
-                } else {
-                    System.out.println("Необходимо авторизоваться.");
-                }
+
+                Table.getTable().delete(subjName, objName, access);
+
                 continue;
             }
 
 
             if (s.equals("destroyObject")) {
                 String objName = scanner.next();
-                if (currentUser != null) {
-                    Table.getTable().destroyObject(currentUser, objName);
-                } else {
-                    System.out.println("Необходимо авторизоваться.");
-                }
+
+                Table.getTable().destroyObject(currentUser, objName);
+
                 continue;
             }
 
             if (s.equals("destroySubject")) {
                 String subjName = scanner.next();
-                if (currentUser != null) {
-                    Table.getTable().destroySubject(currentUser, subjName);
-                } else {
-                    System.out.println("Необходимо авторизоваться.");
-                }
+                Table.getTable().destroySubject(currentUser, subjName);
+
                 continue;
             }
+
+            if (s.equals("print")) {
+                Table.getTable().print();
+                continue;
+            }
+
+            if (s.equals("createFile")) {
+                String subjectName = scanner.next();
+                String filename = scanner.next();
+                String foldername = scanner.next();
+                Table.getTable().createFile(subjectName, filename, foldername);
+                System.out.println("Создан файл " + filename + " в паке " + foldername);
+                continue;
+            }
+
+            if (s.equals("createFolder")) {
+                String subjName = scanner.next();
+                String folderName = scanner.next();
+                Table.getTable().createFolder(subjName, folderName);
+                System.out.println("Создана папка " + folderName);
+                continue;
+            }
+
+            if (s.equals("executeFile")) {
+                String subjName = scanner.next();
+                String objName = scanner.next();
+                Table.getTable().executeFile(subjName, objName);
+                continue;
+            }
+
             scanner.nextLine();
             System.out.println("Введена неизвестная команда.");
         }

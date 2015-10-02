@@ -6,10 +6,14 @@ public class MySubject extends MyObject {
         this.password = password;
     }
 
+    public MySubject(String name) {
+        super(name);
+        this.password = "";
+    }
+
     public String getPassword() {
         return password;
     }
-
 
 
     @Override
