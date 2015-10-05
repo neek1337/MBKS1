@@ -42,6 +42,31 @@ public class Main {
                 continue;
             }
 
+            if (s.equals("createSubject1")) {
+                String subjName = scanner.next();
+                String password = scanner.next();
+                boolean isSecret = scanner.nextBoolean();
+                Table.getTable().createSubject1(subjName,isSecret);
+                System.out.println("Создан субъект " + subjName);
+                continue;
+            }
+
+
+            if (s.equals("createObject1")) {
+
+                String userName = scanner.next();
+                String objname = scanner.next();
+                boolean isSecret = scanner.nextBoolean();
+                Table.getTable().createObject1(Table.getTable().findSubject(userName), objname, isSecret);
+                System.out.println("Cоздан объект " + objname);
+
+                continue;
+            }
+
+
+
+
+
 
             if (s.equals("delete")) {
                 String subjName = scanner.next();
@@ -87,6 +112,14 @@ public class Main {
                 System.out.println("Создан файл " + filename + " в паке " + foldername);
                 continue;
             }
+            if (s.equals("createFile1")) {
+                String subjectName = scanner.next();
+                String filename = scanner.next();
+                String foldername = scanner.next();
+                Table.getTable().createFile1(subjectName, filename, foldername);
+                System.out.println("Создан файл " + filename + " в паке " + foldername);
+                continue;
+            }
 
             if (s.equals("createFolder")) {
                 String subjName = scanner.next();
@@ -95,11 +128,30 @@ public class Main {
                 System.out.println("Создана папка " + folderName);
                 continue;
             }
+            if (s.equals("createFolder1")) {
+                String subjName = scanner.next();
+                String folderName = scanner.next();
+                boolean isSecret = scanner.nextBoolean();
+                Table.getTable().createFolder1(subjName, folderName, isSecret);
+                System.out.println("Создана папка " + folderName);
+                continue;
+            }
 
             if (s.equals("executeFile")) {
                 String subjName = scanner.next();
                 String objName = scanner.next();
                 Table.getTable().executeFile(subjName, objName);
+                continue;
+            }
+            if (s.equals("executeFile1")) {
+                String subjName = scanner.next();
+                String objName = scanner.next();
+                Table.getTable().executeFile1(subjName, objName);
+                continue;
+            }
+            if (s.equals("printInfo")) {
+                String name = scanner.next();
+                System.out.println(Table.getTable().findObject(name).getName());
                 continue;
             }
 

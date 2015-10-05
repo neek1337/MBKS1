@@ -11,6 +11,10 @@ public class MySubject extends MyObject {
         this.password = "";
     }
 
+    public MySubject(String name, boolean isSecret) {
+        super(name, isSecret);
+    }
+
     public String getPassword() {
         return password;
     }
@@ -32,7 +36,7 @@ public class MySubject extends MyObject {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + password.hashCode();
+        result = 31 * result;
         return result;
     }
 }

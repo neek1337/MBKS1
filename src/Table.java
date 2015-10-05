@@ -179,8 +179,160 @@ public class Table {
                     enter("subjT", myObject.name, access);
                 }
             }
+
+            MySubject subjT = findSubject("subjT");
+            if (checkAccess(subject, findObject("o3"), Access.fromString("r")) &&
+                    checkAccess(findSubject("subjT"), findObject("o3"), Access.fromString("r"))) {
+                createObject(subjT, "o'");
+                enter("subjT", "o'", Access.fromString("r"));
+                enter("subjT", "o'", Access.fromString("w"));
+                enter("subjT", "o'", Access.fromString("o"));
+                enter("subjT", "o'", Access.fromString("e"));
+                enter("s2", "o'", Access.fromString("r"));
+                //записываем информацию из о3 в о'
+                destroySubject(subject, "subjT");
+            }
+        }
+
+    }
+
+    public boolean createObject1(MySubject owner, String objectName, boolean isSecret) {
+
+
+        MyObject object = new MyObject(objectName, isSecret);
+
+        objectHashMap.put(object, new HashMap<MySubject, ArrayList<Access>>());
+
+        return false;
+    }
+
+    public boolean createSubject1(String subjectName, boolean isSecret) {
+        MySubject subject = new MySubject(subjectName, isSecret);
+
+        subjectHashMap.put(subject, new HashMap<MyObject, ArrayList<Access>>());
+
+        objectHashMap.put(subject, new HashMap<MySubject, ArrayList<Access>>());
+
+        return false;
+    }
+
+    public void createFile1(String subjName, String fileName, String folderName) {
+        MySubject subject = findSubject(subjName);
+        MyObject folder = findObject(folderName);
+        if (checkAccess(subject, folder, Access.fromString("w"))) {
+            createObject1(subject, fileName, folder.isSecret());
+            enter(subjName, fileName, Access.fromString("o"));
+            enter(subjName, fileName, Access.fromString("r"));
+            enter(subjName, fileName, Access.fromString("w"));
+            enter(subjName, fileName, Access.fromString("e"));
+        } else System.out.println("Недостаточно прав");
+        HashMap<MySubject, ArrayList<Access>> subjMap = objectHashMap.get(folder);
+        for (MySubject mySubject : subjMap.keySet()) {
+            for (Access access : subjMap.get(mySubject)) {
+                if (!subject.equals(mySubject)) {
+                    enter(mySubject.getName(), fileName, access);
+                }
+            }
+
         }
     }
+
+    public void createFolder1(String subjName, String folderName, boolean isSecret) {
+        MySubject subject = findSubject(subjName);
+        MyObject folder = findObject(folderName);
+        createObject1(subject, folderName, isSecret);
+        enter(subjName, folderName, Access.fromString("o"));
+        enter(subjName, folderName, Access.fromString("r"));
+        enter(subjName, folderName, Access.fromString("w"));
+        enter(subjName, folderName, Access.fromString("e"));
+    }
+
+    public boolean checkSecretFiled(MyObject o1, MyObject o2) {
+        if (o1.isSecret || !o2.isSecret) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public void enter1(String subjectName, String objectName, Access access) {
+        MyObject object = findObject(objectName);
+        MySubject subject = findSubject(subjectName);
+        if (object.isSecret == subject.isSecret) {
+            HashMap<MyObject, ArrayList<Access>> subj = subjectHashMap.get(subject);
+            if (subj.get(object) == null) {
+                subj.put(object, new ArrayList<Access>());
+            }
+            subj.get(object).add(access);
+            if (objectHashMap.get(object).get(subject) == null) {
+                objectHashMap.get(object).put(subject, new ArrayList<Access>());
+            }
+            objectHashMap.get(object).get(subject).add(access);
+        } else {
+            System.out.println("НЕдостаточно прав для доступа к секретному фалу");
+        }
+    }
+
+
+    public void executeFile1(String subjName, String objName) {
+        MySubject subject = findSubject(subjName);
+        MyObject object = findObject(objName);
+        if (checkAccess(subject, object, Access.fromString("r")) &&
+                checkAccess(subject, object, Access.fromString("w")) &&
+                checkAccess(subject, object, Access.fromString("e")) &&
+                checkSecretFiled(subject, object)) {
+            createSubject1("subjT", true);
+            HashMap<MyObject, ArrayList<Access>> s = subjectHashMap.get(subject);
+            for (MyObject myObject : s.keySet()) {
+                for (Access access : s.get(myObject)) {
+                    if (myObject.isSecret) {
+                        enter("subjT", myObject.name, access);
+                    }
+                }
+            }
+
+            MySubject subjT = findSubject("subjT");
+            if (checkAccess(subject, findObject("o3"), Access.fromString("r")) &&
+                    checkAccess(findSubject("subjT"), findObject("o3"), Access.fromString("r")) && checkSecretFiled(subjT,findObject("o3"))) {
+                createObject1(subjT, "o'", true);
+                enter1("subjT", "o'", Access.fromString("r"));
+                enter1("subjT", "o'", Access.fromString("w"));
+                enter1("subjT", "o'", Access.fromString("o"));
+                enter1("subjT", "o'", Access.fromString("e"));
+                enter1("s2", "o'", Access.fromString("r"));
+
+                destroySubject(subject, "subjT");
+            }
+
+
+            createSubject1("subjT", false);
+
+            for (MyObject myObject : s.keySet()) {
+                for (Access access : s.get(myObject)) {
+                    if (!myObject.isSecret) {
+                        enter("subjT", myObject.name, access);
+                    }
+                }
+            }
+
+            subjT = findSubject("subjT");
+            if (checkAccess(subject, findObject("o3"), Access.fromString("r")) &&
+                    checkAccess(findSubject("subjT"), findObject("o3"), Access.fromString("r"))&& checkSecretFiled(subjT,findObject("o3"))) {
+                createObject1(subjT, "o'", true);
+                enter1("subjT", "o'", Access.fromString("r"));
+                enter1("subjT", "o'", Access.fromString("w"));
+                enter1("subjT", "o'", Access.fromString("o"));
+                enter1("subjT", "o'", Access.fromString("e"));
+                enter1("s2", "o'", Access.fromString("r"));
+
+
+            }
+            destroySubject(subject, "subjT");
+        }
+
+    }
+
+
 }
 
 

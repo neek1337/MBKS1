@@ -1,7 +1,25 @@
 public class MyObject {
     protected String name;
+    protected boolean isSecret;
+
+    public MyObject(String name, boolean isSecret) {
+        this.name = name;
+        this.isSecret = isSecret;
+    }
+
+    public boolean isSecret() {
+        return isSecret;
+    }
+
+    public void setSecret(boolean isSecret) {
+        this.isSecret = isSecret;
+    }
 
     public MyObject(String name) {
+        this.name = name;
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
 
